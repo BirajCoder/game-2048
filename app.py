@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import random
 
 class Board:
     grid_colour = (0,0,0)
@@ -96,6 +97,32 @@ class Board:
             loc_y += text_loc
         pygame.display.flip()
 
+    def get_random_index(self):
+        n = random.randrange(0, self.dim * self.dim)
+        return (n//2, n%2)
+
+    def fill_random(self):
+        i, j = self.get_random_index()
+        while self.grid[i][j] != 0:
+            i, j = self.get_random_index()
+        self.grid[i][j] = random.choice([2, 4])
+
+    def move_left(self):
+        for i in range(self.dim):
+            self.set_row(self.update_list(self.get_row(i), True), i)
+
+    def move_right(self):
+        for i in range(self.dim):
+            self.set_row(self.update_list(self.get_row(i)), i)
+
+    def move_up(self):
+        for i in range(self.dim):
+            self.set_column(self.update_list(self.get_column(i), True), i)
+
+    def move_down(self):
+        for i in range(self.dim):
+            self.set_column(self.update_list(self.get_column(i)), i)
+
 class Game:
 
     def __init__(self):
@@ -108,8 +135,12 @@ class Game:
 
     def run(self):
         running = True
-
+        start = True
         while running:
+            if start:
+                self.board.fill_random()
+            self.board.fill_random()
+            start = False
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
@@ -126,7 +157,7 @@ class Game:
 
                     if event.key == K_DOWN:
                         self.board.move_down()
-
+                    self.board.fill_grid()
                 elif event.type == QUIT:
                     running = False
                 
