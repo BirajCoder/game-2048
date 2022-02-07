@@ -140,6 +140,7 @@ class Board:
         while self.grid[i][j] != 0:
             i, j = self.get_random_index()
         self.grid[i][j] = random.choice([2, 4])
+        self.fill_grid()
 
 
     def move_horizontal(self, reverse=False):
@@ -177,39 +178,44 @@ class Game:
 
     def run(self):
         running = True
-        start = True
+        self.board.fill_random()
+        self.board.fill_random()
         while running:
             for event in pygame.event.get():
+                flag = False
                 if event.type == KEYDOWN:
-                    if start:
-                        self.board.fill_random()
-                        self.board.fill_random()
-                    start = False
+                    
                     if event.key == K_ESCAPE:
                         running = False
+                        flag = True
 
                     if event.key == K_LEFT:
                         self.board.move_horizontal(True)
+                        flag = True
 
                     if event.key == K_RIGHT:
                         self.board.move_horizontal()
+                        flag = True
 
                     if event.key == K_UP:
                         self.board.move_vertical(True)
+                        flag = True
 
                     if event.key == K_DOWN:
                         self.board.move_vertical()
+                        flag = True
 
-                    self.board.fill_grid()
-                    
-                    # Maximum score achieved 
-                    if self.MAX <= self.board.MAX:
-                        running = False
-                    has_no_zero = self.board.no_zeros()
-                    if not has_no_zero:
-                        self.board.fill_random()
-                    if self.board.is_full() and has_no_zero:
-                        running = False
+                    if flag:
+                        self.board.fill_grid()
+                        
+                        # Maximum score achieved 
+                        if self.MAX <= self.board.MAX:
+                            running = False
+                        has_no_zero = self.board.no_zeros()
+                        if not has_no_zero:
+                            self.board.fill_random()
+                        if self.board.is_full() and has_no_zero:
+                            running = False
                 elif event.type == QUIT:
                     running = False
                 if running == False:
