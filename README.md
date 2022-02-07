@@ -14,8 +14,8 @@ same value, a move parallel to that row/column will combine the first two and la
 
 Initial Image:
 
-![First](.\images\img1.png)
+![First](./images/img1.png)
 
 Final Image: 
 
-![Second](.\images\img2.png)
+![Second](./images/img2.png)
