@@ -31,7 +31,7 @@ class Board:
 
     def get_column(self, x):
         li = []
-        for row in range(self.dim):
+        for row in self.grid:
             li.append(row[x-1])
         return li
     
@@ -77,11 +77,9 @@ class Board:
             return li[::-1]
         return li
         
-    def write_text(self, text, location, reset=False):
-        textFont = pygame.font.Font('freesansbold.ttf', 60)
-        textSurf = textFont.render(str(text), True, (0,0,0))
-        if reset:
-            textSurf = textFont.render(str(text), True, self.background)
+    def write_text(self, text, location, color=(0,0,0)):
+        textFont = pygame.font.Font('freesansbold.ttf', 30)
+        textSurf = textFont.render(text, True, color)
         textRect = textSurf.get_rect()
         textRect.center = location
         self.parent_window.blit(textSurf, textRect)
@@ -92,20 +90,26 @@ class Board:
         for x in range(self.dim):
             loc_x = text_loc//2
             for y in range(self.dim):
-                self.write_text(self.grid[x][y], (loc_x, loc_y))
+                temp_x, temp_y = loc_x - 45, loc_y - 45
+                pygame.draw.rect(self.parent_window, self.background, pygame.Rect(temp_x, temp_y, 90, 90))
+                if self.grid[x][y] != 0:
+                    self.write_text(str(self.grid[x][y]), (loc_x, loc_y))
                 loc_x += text_loc
             loc_y += text_loc
+        print(*self.grid, sep="\n")
         pygame.display.flip()
 
     def get_random_index(self):
         n = random.randrange(0, self.dim * self.dim)
-        return (n//2, n%2)
+        return (n//self.dim, n%self.dim)
 
     def fill_random(self):
         i, j = self.get_random_index()
+        print(i,j, self.grid[i][j] != 0)
         while self.grid[i][j] != 0:
             i, j = self.get_random_index()
         self.grid[i][j] = random.choice([2, 4])
+
 
     def move_left(self):
         for i in range(self.dim):
@@ -137,12 +141,12 @@ class Game:
         running = True
         start = True
         while running:
-            if start:
-                self.board.fill_random()
-            self.board.fill_random()
-            start = False
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
+                    if start:
+                        self.board.fill_random()
+                    self.board.fill_random()
+                    start = False
                     if event.key == K_ESCAPE:
                         running = False
                         
@@ -158,11 +162,11 @@ class Game:
                     if event.key == K_DOWN:
                         self.board.move_down()
                     self.board.fill_grid()
+                    if self.board.is_full():
+                        running = False
                 elif event.type == QUIT:
                     running = False
                 
-                if self.board.is_full():
-                    running = False
 
 
 if __name__ == "__main__":
