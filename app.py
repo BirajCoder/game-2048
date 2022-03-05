@@ -6,9 +6,9 @@ import time
 class Board:
     grid_colour = (0,0,0)
     background = (247, 217, 193)
-    WINDOW_WIDTH = 600
-    WINDOW_HEIGHT = 600
-    dim = 4
+    WINDOW_WIDTH = 800
+    WINDOW_HEIGHT = 800
+    dim = 8
     blockSize = WINDOW_HEIGHT//dim
     MAX = 0
     
@@ -166,11 +166,12 @@ class Board:
 
 
 class Game:
-    MAX = 2048
-
+    MAX = 32
+    width = 800
+    height = 900
     def __init__(self):
         pygame.init()
-        self.window = pygame.display.set_mode((600, 700))
+        self.window = pygame.display.set_mode((self.width, self.height))
         self.window.fill((247, 217, 193))
         self.board = Board(self.window)
         self.board.make_grid(self.board.dim)
@@ -219,8 +220,8 @@ class Game:
                 elif event.type == QUIT:
                     running = False
                 if running == False:
-                    self.board.write_text(f"GAME OVER.. Please wait", (300, 650), (255, 0, 0), 20)
-                    time.sleep(4)
+                    self.board.write_text(f"GAME OVER.. Please wait", (self.width//2, self.width+50), (255, 0, 0), 20)
+                    time.sleep(1)
 
 
 if __name__ == "__main__":
