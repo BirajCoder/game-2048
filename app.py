@@ -11,7 +11,7 @@ class Board:
 
     # Change this to change the number of boxes/dimensino
     dim = 8
-    
+
     blockSize = WINDOW_HEIGHT//dim
     MAX = 0
     
@@ -229,6 +229,6 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(n)
+    game = Game()
     game.run()
 
