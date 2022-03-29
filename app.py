@@ -8,7 +8,10 @@ class Board:
     background = (247, 217, 193)
     WINDOW_WIDTH = 800
     WINDOW_HEIGHT = 800
+
+    # Change this to change the number of boxes/dimensino
     dim = 8
+    
     blockSize = WINDOW_HEIGHT//dim
     MAX = 0
     
@@ -166,7 +169,9 @@ class Board:
 
 
 class Game:
-    MAX = 32
+    # Change this to increase or decrease the Maximum value
+    MAX = 2048
+
     width = 800
     height = 900
     def __init__(self):
@@ -175,7 +180,6 @@ class Game:
         self.window.fill((247, 217, 193))
         self.board = Board(self.window)
         self.board.make_grid(self.board.dim)
-        
 
     def run(self):
         running = True
@@ -225,6 +229,6 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game()
+    game = Game(n)
     game.run()
 
